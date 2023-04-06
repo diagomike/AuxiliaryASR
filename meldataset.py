@@ -14,7 +14,7 @@ import torch.nn.functional as F
 import torchaudio
 from torch.utils.data import DataLoader
 
-from g2p_en import G2p
+from text.cleaners import amh_g2p
 
 import logging
 logger = logging.getLogger(__name__)
@@ -47,13 +47,13 @@ class MelDataset(torch.utils.data.Dataset):
 
         _data_list = [l[:-1].split('|') for l in data_list]
         self.data_list = [data if len(data) == 3 else (*data, 0) for data in _data_list]
-        self.text_cleaner = TextCleaner(dict_path)
+        self.text_cleaner = TextCleaner()
         self.sr = sr
 
         self.to_melspec = torchaudio.transforms.MelSpectrogram(**MEL_PARAMS)
         self.mean, self.std = -4, 4
         
-        self.g2p = G2p()
+        self.g2p = amh_g2p()
 
     def __len__(self):
         return len(self.data_list)
