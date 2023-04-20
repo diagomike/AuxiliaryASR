@@ -51,7 +51,7 @@ def main(config_path):
     train_list, val_list = get_data_path_list(train_path, val_path)
     train_dataloader = build_dataloader(train_list,
                                         batch_size=batch_size,
-                                        num_workers=8,
+                                        num_workers=2,
                                         dataset_config=config.get('dataset_params', {}),
                                         device=device)
 

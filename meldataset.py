@@ -34,6 +34,8 @@ MEL_PARAMS = {
     "win_length": 1200,
     "hop_length": 300
 }
+def g2p(text):
+    return list(text)
 
 class MelDataset(torch.utils.data.Dataset):
     def __init__(self,
@@ -53,7 +55,8 @@ class MelDataset(torch.utils.data.Dataset):
         self.to_melspec = torchaudio.transforms.MelSpectrogram(**MEL_PARAMS)
         self.mean, self.std = -4, 4
         
-        self.g2p = amh_g2p
+        # self.g2p = amh_g2p
+        self.g2p = g2p
 
     def __len__(self):
         return len(self.data_list)
@@ -82,7 +85,7 @@ class MelDataset(torch.utils.data.Dataset):
         wave, sr = sf.read(wave_path)
 
         # phonemize the text
-        ps = self.g2p[text.replace('-', ' ')]
+        ps = self.g2p(text)
         if "'" in ps:
             ps.remove("'")
         text = self.text_cleaner(ps)
